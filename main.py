@@ -28,7 +28,6 @@ async def main(date: pendulum.Date):
 def SaveReverbListingsToGCS(request):
     try:
         payload = json.loads(request.data)
-
         if payload is not None:
             req = Request(**payload)
         else:
