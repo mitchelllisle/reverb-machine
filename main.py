@@ -12,10 +12,10 @@ logger.setLevel(logging.INFO)
 
 
 async def main(date: pendulum.Date):
-    listings = await asyncio.gather(*[do(page, date) for page in range(1, PipelineConfig.REVERB.max_pages)])
+    listings = await asyncio.gather(*[do(page) for page in range(1, PipelineConfig.REVERB.max_pages)])
     flattened = fn.lflatten(listings)
 
-    new_listings = fn.lfilter(
+    new_listings = fn.filter(
         lambda x: yesterdays_listings(x, date), flattened
     )
 
@@ -23,9 +23,10 @@ async def main(date: pendulum.Date):
     upload_blob(serialised, f"data/pedals/{date.strftime('%Y/%m/%d')}/data.jsonl")
 
 
-def SaveReverbListingsToGCS(event, context):
+def SaveReverbListingsToGCS(request):
     try:
         payload = Request()
+        logger.info(f"Fetching listings for date: {payload.date}")
         asyncio.run(main(payload.date))
     except Exception as err:
         logger.error(err)

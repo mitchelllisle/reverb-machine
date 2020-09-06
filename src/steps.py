@@ -8,7 +8,7 @@ import jsonlines
 from io import StringIO
 
 
-async def do(page, date):
+async def do(page):
     listings = await get_reverb_listings(page)
     return listings
 
