@@ -6,6 +6,10 @@ import pendulum
 class Request(BaseModel):
     date: pendulum.Date = pendulum.today(pendulum.tz.UTC).date()
 
+    @validator("date", each_item=True, always=True)
+    def date_val(cls, v):
+        return pendulum.from_format(str(v), "YYYY-MM-DD")
+
     class Config:
         arbitrary_types_allowed = True
 

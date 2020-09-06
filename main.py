@@ -5,6 +5,7 @@ import pendulum
 import funcy as fn
 from src.config import PipelineConfig
 import asyncio
+import json
 
 
 logger = logging.getLogger(__name__)
@@ -20,14 +21,20 @@ async def main(date: pendulum.Date):
     )
 
     serialised = fn.lmap(listing_to_dict, new_listings)
+    logger.info(f"Found {len(serialised)} listings to be saved")
     upload_blob(serialised, f"data/pedals/{date.strftime('%Y/%m/%d')}/data.jsonl")
 
 
 def SaveReverbListingsToGCS(request):
     try:
-        payload = Request()
-        logger.info(f"Fetching listings for date: {payload.date}")
-        asyncio.run(main(payload.date))
+        payload = json.loads(request.data)
+
+        if payload is not None:
+            req = Request(**payload)
+        else:
+            req = Request()
+        logger.info(f"Fetching listings for date: {req.date}")
+        asyncio.run(main(req.date))
     except Exception as err:
         logger.error(err)
         raise

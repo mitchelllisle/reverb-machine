@@ -11,4 +11,5 @@ gcloud functions deploy $FUNCTION_NAME \
   --set-env-vars GOOGLE_PROJECT_ID=$PROJECT_ID \
   --runtime python37 \
   --timeout $TIMEOUT \
-  --trigger-http
+  --trigger-http \
+  --memory 1024MB
