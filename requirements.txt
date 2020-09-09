@@ -1,6 +1,5 @@
 httpx
 funcy
-prefect
 jsonlines
 google-cloud-storage
 pydantic
