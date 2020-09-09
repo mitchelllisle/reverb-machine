@@ -27,13 +27,13 @@ async def main(date: pendulum.Date):
 
 def SaveReverbListingsToGCS(request):
     try:
-        payload = json.loads(request.data)
-        if payload is not None:
-            req = Request(**payload)
-        else:
-            req = Request()
+        req = Request()
         logger.info(f"Fetching listings for date: {req.date}")
         asyncio.run(main(req.date))
     except Exception as err:
         logger.error(err)
         raise
+
+
+if __name__ == "__main__":
+    SaveReverbListingsToGCS(None)
