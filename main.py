@@ -33,7 +33,3 @@ def SaveReverbListingsToGCS(request):
     except Exception as err:
         logger.error(err)
         raise
-
-
-if __name__ == "__main__":
-    SaveReverbListingsToGCS(None)
