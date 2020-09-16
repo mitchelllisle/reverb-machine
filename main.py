@@ -5,7 +5,6 @@ import pendulum
 import funcy as fn
 from src.config import PipelineConfig
 import asyncio
-import json
 
 
 logger = logging.getLogger(__name__)

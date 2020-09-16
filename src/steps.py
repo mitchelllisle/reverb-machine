@@ -1,4 +1,5 @@
 import httpx
+from httpx import HTTPError, ConnectTimeout
 from src.config import PipelineConfig
 from src.models import ReverbListings, ReverbListing
 from typing import List, Dict
@@ -6,6 +7,7 @@ import pendulum
 from src import logger
 import jsonlines
 from io import StringIO
+import funcy as fn
 
 
 async def do(page):
@@ -21,6 +23,7 @@ def yesterdays_listings(listing: ReverbListing, date: pendulum.Date):
         return False
 
 
+@fn.retry(tries=PipelineConfig.REVERB.max_retries, errors=[HTTPError, ConnectTimeout])
 async def get_reverb_listings(page: int, category: str = "effects-and-pedals") -> List[ReverbListing]:
     logger.info(f"Fetching page {page} for {category}")
     querystring = {
